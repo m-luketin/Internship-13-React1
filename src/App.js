@@ -2,48 +2,64 @@ import React, { Component } from 'react';
 import './App.css';
 import ColoredText from './components/ColoredText'
 
-
 class App extends Component {
-    state = {
-        coloredTexts: [
-            {color: 'black', active: 1},
-            {color: 'black', active: 1},
-            {color: 'black', active: 1}]
+    constructor(props){
+        super(props);
+
+        this.state = {
+            color: 'black',
+            active: [true, true, true],
+            bold: [false, false, false, false, false, false]
+        }
     }
 
     render(){
         return (
             <>
                 <h2>Color</h2>
-                <span onClick={() => this.ChangeColor("red")}>Red</span><br />
-                <span onClick={() => this.ChangeColor("blue")}>Blue</span><br />
-                <span onClick={() => this.ChangeColor("green")}>Green</span><br />
+                <span onClick={() => this.ChangeColorHandler("red", 0)} style={ this.state.bold[0] ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}>Red</span><br />
+                <span onClick={() => this.ChangeColorHandler("blue", 1)} style={ this.state.bold[1] ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}>Blue</span><br />
+                <span onClick={() => this.ChangeColorHandler("green", 2)} style={ this.state.bold[2] ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}>Green</span><br />
                 <h2>Number</h2>
-                <span onClick={() => this.Toggle(1)}>1</span><br />
-                <span onClick={() => this.Toggle(2)}>2</span><br />
-                <span onClick={() => this.Toggle(3)}>3</span><br />
+                <span onClick={() => this.Toggle(0, 0)} style={ this.state.bold[3] ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}>1</span><br />
+                <span onClick={() => this.Toggle(1, 1)} style={ this.state.bold[4] ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}>2</span><br />
+                <span onClick={() => this.Toggle(2, 2)} style={ this.state.bold[5] ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}>3</span><br />
                 <h2>ColoredText</h2>
-                <ColoredText value={1} color={this.state.coloredTexts[0].color} active={this.state.coloredTexts[0].active} />
-                <ColoredText value={2} color={this.state.coloredTexts[1].color} active={this.state.coloredTexts[1].active} />
-                <ColoredText value={3} color={this.state.coloredTexts[2].color} active={this.state.coloredTexts[2].active} />
+                <ColoredText value={1} color={this.state.color} active={this.state.active[0]} />
+                <ColoredText value={2} color={this.state.color} active={this.state.active[1]} />
+                <ColoredText value={3} color={this.state.color} active={this.state.active[2]} />
             </>
         )
     }
     
-    ChangeColor(color) 
-    {
-        console.log(color);
-        console.log("hi i change the color");
+    ChangeColorHandler = (color, buttonId) => {    
+        this.setState({color: color});
+        this.BoldColorButton(buttonId);
     }
     
+    Toggle = (id, buttonId) => {
+        this.setState(previousState => {
+            previousState.active[id] = !previousState.active[id];
+            return {
+                active: previousState.active
+            };
+        })
+        this.BoldIndex(buttonId);
+    }
+    
+    
+    BoldColorButton = (buttonId) => {
+        for(let i = 0; i < 3; i++){
+            if(i !== buttonId)
+                this.state.bold[i] = false;
+            else
+                this.state.bold[buttonId] = true;
+        }
+    }
 
-    Toggle(id)
-    {
-        console.log(id);
-        console.log("hi i toggle stuff");
+    BoldIndex = (buttonId) => {
+        this.state.bold[buttonId + 3] = !this.state.bold[buttonId + 3];
     }
 } 
-
-
 
 export default App;
