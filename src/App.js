@@ -49,16 +49,26 @@ class App extends Component {
     
     
     BoldColorButton = (buttonId) => {
-        for(let i = 0; i < 3; i++){
-            if(i !== buttonId)
-                this.state.bold[i] = false;
-            else
-                this.state.bold[buttonId] = true;
-        }
+        this.setState(previousState => {
+            for(let i = 0; i < 3; i++){
+                if(i === buttonId)
+                    previousState.bold[i] = !previousState.bold[buttonId];
+                else
+                    previousState.bold[i] = false;
+            }
+            return {
+                button: previousState.button
+            };
+        })
     }
 
     BoldIndex = (buttonId) => {
-        this.state.bold[buttonId + 3] = !this.state.bold[buttonId + 3];
+        this.setState(previousState => {
+            previousState.bold[buttonId + 3] = !previousState.bold[buttonId + 3];
+            return {
+                button: previousState.button
+            };
+        })
     }
 } 
 
